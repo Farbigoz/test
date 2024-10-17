@@ -82,106 +82,18 @@ def _addPlaceObjectTag(swf: Swf, sprite, setCharacterId, depth, name, index,
 
 
 def UninstallUIScreenSocialHubV1():
-    gameSwf = GetGameFileClass("UI_ScreenSocialHub.swf")
-    gameSwf.open()
-
-    swf = gameSwf.gameSwf
-
-    if UI_SCREEN_SOCIAL_HUB_MOD_V1_ID in gameSwf.installed:
-        mainSprite = swf.getElementById(swf.symbolClass.getTagByName("a_ScreenSocialHub"))[0]
-        spriteId = 0
-        for tag in mainSprite.getTags().iterator():
-            if isinstance(tag, PlaceObject2Tag) and tag.name == "am_PanelInternal":
-                spriteId = tag.characterId
-                break
-
-        sprite = swf.getElementById(spriteId)[0]
-
-        for tag in list(sprite.getTags().iterator()).copy():
-            if isinstance(tag, PlaceObject2Tag):
-                if tag.name == "v_bg":
-                    pass
-                    sprite.removeTag(tag)
-                elif tag.name in ["v_bml", "v_bh"]:
-                    sprite.removeTag(tag)
-                    for elem in swf.getElementById(tag.characterId):
-                        swf.removeElement(elem)
-
-        sprite.setModified(True)
-
-        gameSwf.installed.remove(UI_SCREEN_SOCIAL_HUB_MOD_V1_ID)
-        gameSwf.save()
-
-    gameSwf.close()
+    pass
 
 
-def InstallUIScreenSocialHubV1(bmlVersion):
-    gameSwf = GetGameFileClass("UI_ScreenSocialHub.swf")
-    gameSwf.open()
 
-    swf = gameSwf.gameSwf
+def InstallUIScreenSocialHubV1():
 
-    # Update mod
-    if UI_SCREEN_SOCIAL_HUB_MOD_V1_ID in gameSwf.installed:
-        mainSprite = swf.getElementById(swf.symbolClass.getTagByName("a_ScreenSocialHub"))[0]
-        spriteId = 0
-        for tag in mainSprite.getTags().iterator():
-            if isinstance(tag, PlaceObject2Tag) and tag.name == "am_PanelInternal":
-                spriteId = tag.characterId
-                break
+    print("Installing ModLoader...")
 
-        sprite = swf.getElementById(spriteId)[0]
 
-        for tag in list(sprite.getTags().iterator()).copy():
-            if isinstance(tag, PlaceObject2Tag):
-                if tag.name == "v_bg":
-                    pass
-                elif tag.name == "v_bml":
-                    for elem in swf.getElementById(tag.characterId, DefineEditTextTag):
-                        _updateTextContent(elem, bmlVersion)
-                elif tag.name == "v_bh":
-                    for elem in swf.getElementById(tag.characterId, DefineEditTextTag):
-                        _updateTextContent(elem, BH_VERSION_TEXT)
 
-        sprite.setModified(True)
-
-    # Install mod
-    else:
-        # BML Version text
-        bmlTextId = _addText(swf, bmlVersion, 4200, 366)
-
-        # Bh Version text
-        bhTextId = _addText(swf, BH_VERSION_TEXT, 4200, 366)
-
-        # Find sprite for editing
-        mainSprite = swf.getElementById(swf.symbolClass.getTagByName("a_ScreenSocialHub"))[0]
-        spriteId = 0
-        for tag in mainSprite.getTags().iterator():
-            if isinstance(tag, PlaceObject2Tag) and tag.name == "am_PanelInternal":
-                spriteId = tag.characterId
-                break
-
-        sprite = swf.getElementById(spriteId)[0]
-        startIndex = len(list(sprite.getTags().iterator())) - 1
-
-        # Add background
-        _addPlaceObjectTag(swf, sprite, swf.symbolClass.getTagByName("a_SocialHubCursor"), 9, "v_bg", startIndex,
-                           -100, 1300, -66000, 60000)
-
-        # Add bml version
-        _addPlaceObjectTag(swf, sprite, bmlTextId, 10, "v_bml", startIndex + 1, -4350, 1350)
-
-        # Add bh version
-        _addPlaceObjectTag(swf, sprite, bhTextId, 11, "v_bh", startIndex + 2, -4350, 1650)
-
-        gameSwf.installed.append(UI_SCREEN_SOCIAL_HUB_MOD_V1_ID)
-
-    gameSwf.save()
-    gameSwf.close()
 
 
 def InstallBaseMod(firstText=None):
-    if firstText is None:
-        firstText = f"Brawlhalla ModLoader Core: {CORE_VERSION}"
 
-    InstallUIScreenSocialHubV1(firstText)
+    InstallUIScreenSocialHubV1()
